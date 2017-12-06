@@ -126,4 +126,255 @@ request = urllib.request.Request('http://www.python.org')
 response = urllib.request.urlopen(request)
 print(response.read().decode('utf-8'))
 
+添加header的方式一
+from urllib import request,parse
+url = 'http://httpbin.org/post'
+headers = {
+	'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+	'Host':'httpbin.org'
+}
+dict = {
+	'name':'Germey'
+}
+data = bytes(parse.urlencode(dict),encoding='utf-8')
+req = request.Request(url=url,data=data,headers=headers,method='POST')
+response = request.urlopen(req)
+print(response.read().decode('utf-8')) 
+
+添加header的方式二
+from urllib import request,parse
+url = 'http://httpbin.org/post'
+dict = {
+	'name':'Germey'
+}
+data = bytes(parse.urlencode(dict),encoding='utf-8')
+req = request.Request(url=url,data=data,method='POST')
+req.add_header('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
+response = request.urlopen(req)
+print(response.read().decode('utf-8')) 
+
+2.5 Hander
+代理
+import urllib.request
+proxy_handler = urllib.request.ProxyHandler({
+	'http':'http://127.0.0.1:9743',
+	'https':'https://127.0.0.1:9743'
+})
+opener = urllib.request.build_opener(proxy_handler)
+response = opener.open('http://www.baidu.com')
+print(response.read())
+
+2.6 Cookie:在客户端保存的用来记录客户身份的文本文件
+import http.cookiejar,urllib.request
+cookie = http.cookiejar.CookieJar()
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(handler)
+response = opener.open('http://www.baidu.com')
+for item in cookie:
+	print(item.name+"="+item.value)
+
+import http.cookiejar,urllib.request
+filename = "cookie.txt"
+cookie = http.cookiejar.MozillaCookieJar(filename)
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(handler)
+response = opener.open('http://www.baidu.com')
+cookie.save(ignore_discard=True,ignore_expires=True)
+
+import http.cookiejar,urllib.request
+filename = "cookie.txt"
+cookie = http.cookiejar.LWPCookieJar(filename)
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(handler)
+response = opener.open('http://www.baidu.com')
+cookie.save(ignore_discard=True,ignore_expires=True)
+
+import http.cookiejar,urllib.request
+cookie = http.cookiejar.LWPCookieJar()
+cookie.load('cookie.txt',ignore_discard=True,ignore_expires=True)
+handler = urllib.request.HTTPCookieProcessor(cookie)
+opener = urllib.request.build_opener(handler)
+response = opener.open('http://www.baidu.com')
+print(response.read().decode('utf-8'))
+
+2.7 异常处理
+from urllib import request,error
+try:
+	response = request.urlopen('https://github.com/ch8935')
+except error.URLError as e:
+	print(e.reason)
+
+from urllib import request,error
+try:
+	response = request.urlopen('https://github.com/ch8935')
+except error.HTTPError as e:
+	print(e.reason,e.code,e.headers,sep='\n')
+except error.URLError as e:
+	print(e.reason)
+else:
+	print('Request Successfully')
+
+import urllib.request
+import urllib.error
+import socket
+try:
+	response = urllib.request.urlopen('http://www.baidu.com',timeout=0.001)
+except urllib.error.URLError as e:
+	print(type(e.reason))
+	if isinstance(e.reason,socket.timeout):
+		print('TIME OUT')
+
+2.8 URL解析
+2.8.1 urlparse
+urllib.parse.urlparse(urlstring,scheme='',allow_fragments=True)
+
+from urllib.parse import urlparse
+result = urlparse('http://www.baidu.com/index.html;user?id=5#comment')
+print(type(result),result)
+
+from urllib.parse import urlparse
+result = urlparse('www.baidu.com/index.html;user?id=5#comment',scheme='https')
+print(result)
+
+from urllib.parse import urlparse
+result = urlparse('http://www.baidu.com/index.html;user?id=5#comment',scheme='https')
+print(result)
+
+from urllib.parse import urlparse
+result = urlparse('http://www.baidu.com/index.html;user?id=5#comment',allow_fragments=False)
+print(result)
+
+from urllib.parse import urlparse
+result = urlparse('http://www.baidu.com/index.html#comment',allow_fragments=False)
+print(result)
+
+2.8.2 urlunparse
+from urllib.parse import urlunparse
+data = ['http','www.baidu.com','index.html','user','a=6','comment']
+print(urlunparse(data))
+
+2.8.3 urljoin方法拼接
+from urllib.parse import urljoin
+print(urljoin('http://www.baidu.com','FAQ.html'))
+print(urljoin('http://www.baidu.com','http://cuiqingcai.com/FAQ.html'))
+
+2.8.4 urlencode方法可以把字典对象转化为get请求参数
+from urllib.parse import urlencode
+params={
+	'name':'germey',
+	'age':22
+}
+base_url='http://www.baidu.com?'
+url = base_url+urlencode(params)
+print(url)
+
+
+三.Requests库详解
+3.1 Requests库是什么
+Python实现的简单易用的HTTP库
+
+3.2 Requests库用法
+3.2.1 实例引入
+import requests
+response = requests.get('https://www.baidu.com/')
+print(type(response))
+print(response.status_code)
+print(type(response.text))
+print(response.text)
+print(response.cookies)
+
+3.2.2 各种请求方式
+import requests
+requests.post('http://httpbin.org/post')
+requests.put('http://httpbin.org/put')
+requests.delete('http://httpbin.org/delete')
+requests.head('http://httpbin.org/get')
+requests.options('http://httpbin.org/get')
+
+3.2.3 请求
+①基本GET请求
+import requests
+response = requests.get('http://httpbin.org/get')
+print(response.text)
+
+②带参数GET请求
+import requests
+response = requests.get('http://httpbin.org/get?name=germey&age=22')
+print(response.text)
+
+import requests
+data={
+	'name':'germey',
+	'age':22
+}
+response = requests.get('http://httpbin.org/get',params=data)
+print(response.text)
+
+3.3 解析json
+import requests
+import json
+response = requests.get('http://httpbin.org/get')
+print(type(response.text))
+print(response.json())
+print(json.loads(response.text))
+print(type(response.json()))
+
+3.4 获取二进制数据
+import requests
+response = requests.get('https://github.com/favicon.ico')
+print(type(response.text),type(response.content))
+print(response.text)
+print(response.content)
+
+import requests
+response = requests.get('https://github.com/favicon.ico')
+with open('favicon.ico','wb') as f:
+	f.write(response.content)
+	f.close()
+
+添加headers
+import requests
+response = requests.get('https://www.zhihu.com/explore')
+print(response.text)
+
+import requests
+headers = {
+	'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+}
+response = requests.get('https://www.zhihu.com/explore',headers=headers)
+print(response.text)
+
+基本POST请求
+import requests
+data ={'name':'germey','age':'22'}
+response = requests.post("http://httpbin.org/post",data=data)
+print(response.text)
+
+import requests
+data ={'name':'germey','age':'22'}
+headers = {
+	'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+}
+response = requests.post("http://httpbin.org/post",data=data,headers=headers)
+print(response.json())
+
+3.5 响应
+response属性
+import requests
+response = requests.get('http://www.jianshu.com')
+print(type(response.status_code),response.status_code)
+print(type(response.headers),response.headers)
+print(type(response.cookies),response.cookies)
+print(type(response.url),response.url)
+print(type(response.history),response.history)
+
+状态码判断
+import requests
+response = requests.get('http://www.jianshu.com')
+exit() if not response.status_code == requests.codes.ok else print('Request Successfully')
+
+import requests
+response = requests.get('http://www.jianshu.com')
+exit() if not response.status_code == 200 else print('Request Successfully')
+
 
