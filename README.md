@@ -8,3 +8,7 @@ python爬虫项目
 2.MaoyanTop100.py
 
 爬取猫眼电影Top100
+
+3.TaobaoSpider
+
+Selenium+Chrome/PhantomJS抓取淘宝美食
