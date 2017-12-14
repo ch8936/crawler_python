@@ -9,6 +9,10 @@ python爬虫项目
 
 爬取猫眼电影Top100
 
-3.TaobaoSpider
+3.doubanTop250.py
+
+爬取豆瓣电影Top250
+
+4.TaobaoSpider
 
 Selenium+Chrome/PhantomJS抓取淘宝美食
