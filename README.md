@@ -16,3 +16,6 @@ python爬虫项目
 4.TaobaoSpider
 
 Selenium+Chrome/PhantomJS抓取淘宝美食
+
+5.WeixinArticles
+通过关键词爬取微信公众号文章，并存入MongoDB数据库
