@@ -19,5 +19,8 @@ Selenium+Chrome/PhantomJS抓取淘宝美食
 
 5.WeixinArticles
 
-通过关键词爬取微信公众号文章，并存入MongoDB数据库
+通过关键词爬取微信公众号文章
+
+并存入MongoDB数据库
+
 通过代理池更换IP代理的方法来应对反爬措施
