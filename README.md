@@ -24,5 +24,6 @@ Selenium+Chrome/PhantomJS抓取淘宝美食
 通过代理池更换IP代理的方法来应对反爬措施
 
 6.quotetutorial
+
 用Scrapy框架爬取格言网的格言，并存入MongoDB数据库中
 
