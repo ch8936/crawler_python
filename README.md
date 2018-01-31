@@ -30,3 +30,6 @@ Selenium+Chrome/PhantomJS抓取淘宝美食
 7.zhihu
 
 用Scrapy框架爬取知乎的用户关注列表，并存入MongoDB数据库中
+
+8.weibo
+抓取新浪微博信息
